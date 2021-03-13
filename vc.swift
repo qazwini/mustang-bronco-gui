@@ -56,24 +56,7 @@ class ViewController: NSViewController, NSTextFieldDelegate {
     }
 
     func controlTextDidChange(_ obj: Notification) {
-        print("meow")
-        guard let intValue = Int(inputField.stringValue) else {
-            displayLabel.stringValue = "Enter an int"
-            return
-        }
-        
-        let divs3 = intValue % 3 == 0
-        let divs5 = intValue % 5 == 0
-        
-        if divs3 && divs5 {
-            displayLabel.stringValue = "MustangBronco"
-        } else if divs3 {
-            displayLabel.stringValue = "Mustang"
-        } else if divs5 {
-            displayLabel.stringValue = "Bronco"
-        } else {
-            displayLabel.stringValue = inputField.stringValue
-        }
+        displayLabel.stringValue = mustangBronco(inputField.stringValue)
     }
     
 }
