@@ -7,7 +7,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var window: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        window = NSWindow(contentRect: NSMakeRect(10, 10, 400, 300), styleMask: [.titled, .closable], backing: .buffered, defer: false)
+        window = NSWindow(contentRect: NSMakeRect(10, 10, 400, 300), styleMask: [.titled, .closable, .miniaturizable], backing: .buffered, defer: false)
         let content = window!.contentView! as NSView
         let vc = ViewController()
         content.addSubview(vc.view)
@@ -28,31 +28,42 @@ class ViewController: NSViewController, NSTextFieldDelegate {
     let displayLabel = NSTextField()
     
     override func loadView() {
+        self.view = NSView(frame: NSMakeRect(0, 0, 400, 300))
+    }
+    
+    override func viewDidLoad() {
         setupUI()
         inputField.delegate = self
     }
     
     func setupUI() {
-        self.view = NSView(frame: NSMakeRect(0, 0, 400, 300))
-        
         labelify(titleLabel)
         titleLabel.stringValue = "Welcome to the Mustang Bronco Program!"
+        titleLabel.font = .boldSystemFont(ofSize: 16)
         
         labelify(displayLabel)
+        displayLabel.stringValue = "Mustang Bronco"
+        displayLabel.font = .systemFont(ofSize: 40)
+        
+        let stack = NSStackView()
+        stack.alignment = .centerX
+        stack.spacing = 70
+        stack.addArrangedSubview(inputField)
+        stack.addArrangedSubview(displayLabel)
 
-        [titleLabel, inputField, displayLabel].forEach {
+        [titleLabel, stack].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            inputField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
-            inputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            inputField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10)
+            stack.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            stack.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
+            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
+            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50)
         ])
     }
     
@@ -64,7 +75,20 @@ class ViewController: NSViewController, NSTextFieldDelegate {
     }
 
     func controlTextDidChange(_ obj: Notification) {
-        displayLabel.stringValue = inputField.stringValue
+        print("meow")
+        guard let intValue = Int(inputField.stringValue) else { return }
+        let divs3 = intValue % 3 == 0
+        let divs5 = intValue % 5 == 0
+        
+        if divs3 && divs5 {
+            displayLabel.stringValue = "MustangBronco"
+        } else if divs3 {
+            displayLabel.stringValue = "Mustang"
+        } else if divs5 {
+            displayLabel.stringValue = "Bronco"
+        } else {
+            displayLabel.stringValue = inputField.stringValue
+        }
     }
     
 }
