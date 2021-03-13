@@ -2,7 +2,7 @@ SWIFT = swiftc
 
 all: main
 
-main: main.swift
+main: vc.swift main.swift
 	$(SWIFT) $^ -o $@
 
 .PHONY: clean
