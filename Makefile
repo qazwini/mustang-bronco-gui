@@ -1,10 +1,10 @@
 SWIFT = swiftc
 
-all: app
+all: main
 
-app: app.swift
+main: main.swift
 	$(SWIFT) $^ -o $@
 
 .PHONY: clean
 clean:
-	rm -f app
+	rm -f main
